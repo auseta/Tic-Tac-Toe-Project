@@ -5,12 +5,39 @@
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>My Tic-Tac-Toe Game</title>
-  <link rel="stylesheet" href="./style.css">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="style.css">
+  <link href="https://fonts.googleapis.com/css2?family=Trade+Winds&display=swap" rel="stylesheet">
   <script src="./index.js" defer></script>
 </head>
 <body>
-  <div class="game-board">
+  <div class="container">
+    <div class="header">
+      <h1>MY TIC TAC TOE GAME!</h1>
+    </div>
+    <div class="main">
+      <p>
+        To the game of Tic-Tac-Toe -also called three in a row; the cat; zeros and crosses is recognized a millenary origin. During the excavations of the ancient temple of Kurna (1400bc), in Egypt, a board with a format of diagonal and horizontal stripes was discovered and similar boards were found in the temple of Kom Ombo (300bc). It is believed that the Chinese played it in the time of Confucius (500BC) and there are boards carved into the seats of some Cathedrals in England where this game became popular in the fourteenth century.
+      </p>
+      <div class="game-config">
+        <label for="player-x-name">
+          Player X
+          <input type="text" id="player-x-name" name="player-x-name" minlength="3" maxlength="10">
+        </label>
+        <label for="player-o-name">
+          Player O
+          <input type="text" id="player-o-name" name="player-o-name" minlength="3" maxlength="10">
+        </label>
+      </div>
+      <button id="play-button">PLAY &#9658;</button>
+    </div>
+    <div class="game">
 
+    </div>
+    <div class="footer">
+      <p>🎸 A game made it by Augusto Seta 🎸</p>
+    </div>
   </div>
 </body>
 </html>
