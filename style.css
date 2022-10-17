@@ -1,47 +1,95 @@
 :root {
-  --bg-color: #EDCBB1;
-  --horizontal-bar-color: #7C3238;
-  --vertical-bar-color: #3D314A;
+  --yellow-color: #d7f830;
 }
 
-* {
+@font-face {
+  font-family: "Grid";
+  src: url(./font/grindanddeath_demo-webfont.woff);
+}
+
+*,
+*::after,
+*::before {
   margin: 0;
   padding: 0;
+  box-sizing: border-box;
+  font-family: 'Grid', sans-serif;
 }
 
-.game-board {
-  background-color: var(--bg-color);
-  display: grid;
+.container {
   height: 100vh;
-  width: 100vw;
+  background-color: var(--yellow-color);
+  display: grid;
+  grid-template-columns: 1fr;
+  grid-template-rows: repeat(10, 1fr);
+}
+
+.header {
+  display: flex;
   justify-content: center;
-  align-content: center;
-  grid-template-columns: repeat(3, 150px);
-  grid-template-rows: repeat(3, 150px);
+  align-items: center;
+  font-size: 32px;
+  letter-spacing: 5px;
+  grid-row: 1 / 3;
 }
 
-.game-board  .board-element {
-  transition: all .2s linear;
+.main {
+  grid-row: 3 / 10;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: space-around;
 }
 
-.game-board  .board-element:hover {
-  cursor: pointer;
-  background-color: rgba(142, 130, 130, 0.221);
+.main p {
+  padding: 5px 50px;
+  font-size: 24px;
+  letter-spacing: 5px;
 }
 
-/* border-left: none; border-top: none; border-right: none; */
+.game-config {
+  display: flex;
+  font-size: 24px;
+  gap: 100px;
+}
 
-.game-board > .left-space, .game-board > .right-space {
+.game-config label input {
   border: none;
-  border-bottom: 5px solid var(--horizontal-bar-color);
+  width: 120px;
+  padding: 5px 15px;
+  font-size: 20px;
+  background-color: transparent;
+  border-bottom: 2px solid black;
+  outline: none;
 }
 
-.game-board > .middle-space {
-  border: 5px solid var(--vertical-bar-color);
-  border-bottom-color: var(--horizontal-bar-color);
-  border-top: none;
+.main button {
+  width: 120px;
+  background-color: #000000;
+  color: var(--yellow-color);
+  border-radius: 5px;
+  letter-spacing: 5px;
+  cursor: pointer;
+  padding: 5px 10px;
+  margin-bottom: 25px;
 }
 
-.game-board > .middle-space[id="7"], .game-board > .left-space[id="6"], .game-board > .right-space[id="8"] {
-  border-bottom: none;
+.main button:hover {
+  border: 3px solid #000000;
+  background-color: transparent;
+  color: #000000;
+}
+
+.game {
+  display: none;
+  border: 1px solid black;
+  background-color: aquamarine;
+  grid-row: 3 / 10;
+}
+
+.footer {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  grid-row: 10
 }
