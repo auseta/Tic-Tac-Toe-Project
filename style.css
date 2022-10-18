@@ -55,9 +55,10 @@
 
 .game-config label input {
   border: none;
-  width: 120px;
+  width: 130px;
   padding: 5px 15px;
-  font-size: 20px;
+  font-size: 16px;
+  letter-spacing: 5px;
   background-color: transparent;
   border-bottom: 2px solid black;
   outline: none;
@@ -66,6 +67,7 @@
 .main button {
   width: 120px;
   background-color: #000000;
+  border: 3px solid #000000;
   color: var(--yellow-color);
   border-radius: 5px;
   letter-spacing: 5px;
@@ -82,9 +84,32 @@
 
 .game {
   display: none;
-  border: 1px solid black;
-  background-color: aquamarine;
+  grid-template-columns: repeat(3, 150px);
+  grid-template-rows: repeat(3, 150px);
+  justify-content: center;
+  align-content: center;
   grid-row: 3 / 10;
+}
+
+.game div {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 68px;
+}
+
+.left-space, .right-space {
+  border: none;
+  border-bottom: 8px solid black;
+}
+
+.middle-space {
+  border: 8px solid black;
+  border-top: none
+}
+
+.left-space:nth-child(7), .middle-space:nth-child(8), .right-space:nth-child(9) {
+  border-bottom: none;
 }
 
 .footer {
