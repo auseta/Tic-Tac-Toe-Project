@@ -64,7 +64,7 @@
   outline: none;
 }
 
-.main button {
+.main button, .buttons button {
   width: 120px;
   background-color: #000000;
   border: 3px solid #000000;
@@ -76,7 +76,7 @@
   margin-bottom: 25px;
 }
 
-.main button:hover {
+.main button:hover, .buttons button:hover {
   border: 3px solid #000000;
   background-color: transparent;
   color: #000000;
@@ -112,8 +112,23 @@
   border-bottom: none;
 }
 
+.results {
+  display: none;
+  flex-direction: column;
+  font-size: 32px;
+  padding: 0 50px;
+  text-align: center;
+  justify-content: center;
+  align-items: center;
+  grid-row: 3 / 10;
+}
+
+.message {
+  margin-bottom: 50px;
+}
+
 .footer {
-  display: flex;
+  display: grid;
   justify-content: center;
   align-items: center;
   grid-row: 10
