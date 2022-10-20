@@ -1,8 +1,10 @@
 const mainContainer = document.querySelector(".main");
 const gameContainer = document.querySelector(".game");
+const resultsContainer = document.querySelector(".results")
 const playButton = document.querySelector("#play-button");
 const inputX = document.querySelector("#player-x-name");
 const inputO = document.querySelector("#player-o-name");
+const resultsMessage = document.querySelector("#results-message");
 
 const gameboard = (function () {
   const gameboard = {
@@ -66,25 +68,100 @@ const gameboard = (function () {
 })();
 
 const game = (function () {
-  function printConditions(player, enemy) {
+  let boardIterations = 0;
+
+  const winConditions = {
+    winCombos: [
+      [1, 5, 9],
+      [3, 5, 7],
+      [1, 4, 7],
+      [2, 5, 8],
+      [3, 6, 9],
+      [1, 2, 3],
+      [4, 5, 6],
+      [7, 8, 9],
+    ],
+
+    checkWin: function (column, playerMoves) {
+      let win = column.every((mark) => playerMoves.includes(mark));
+      return win;
+    },
+  };
+
+  function victoryResult(player, enemy) {
+    let victoryMessage = Math.round(Math.random() * 2 + 1);
+    switch (victoryMessage) {
+      case 1:
+        resultsMessage.textContent = `This was a massacre, ${player.name} bluntly crushed Enemy.`;
+        break;
+      case 2:
+        resultsMessage.textContent = `but what a battle, it seemed like a hopeless case but ${player.name} knew how to act calmly and achieved victory over ${enemy.name}`;
+        break;
+      case 3:
+        resultsMessage.textContent = `It seems that ${enemy.name} did not know how to respond to ${player.name} clever moves. You should pay more attention next time`;
+        break;
+    }
+  }
+
+  function victory(player, element) {
+    player.playerMoves.push(+element.id);
+    const playerMoves = player.playerMoves;
+    const checkWin = winConditions.checkWin;
+    for (const column of winConditions.winCombos) {
+      if (checkWin(column, playerMoves)) {
+        return true;
+      }
+    }
+  }
+
+  function gameFlow(player, enemy) {
     let boardSpace = document.querySelectorAll(".board-element");
     boardSpace.forEach((space) => {
       space.onclick = function (e) {
-        if (player.getTurn() && !enemy.getTurn()) {
-          space.innerHTML = player.getMark();
-          player.setTurn(false);
-          enemy.setTurn(true);
-        } else if (!player.getTurn() && enemy.getTurn()) {
-          space.innerHTML = enemy.getMark();
-          player.setTurn(true);
-          enemy.setTurn(false);
+        if (space.innerHTML === "") {
+          boardIterations++;
+
+          if (player.getTurn() && !enemy.getTurn()) {
+            space.innerHTML = player.getMark();
+            player.setTurn(false);
+            enemy.setTurn(true);
+            let playerVictory = victory(player, space);
+            if (playerVictory) {
+              gameContainer.style.display = "none"
+              resultsContainer.style.display = "flex"
+              victoryResult(player, enemy)
+            } else if (
+              !playerVictory &&
+              !playerVictory &&
+              boardIterations === 9
+            ) {
+              console.log("ES EMPATE");
+            }
+          } else if (!player.getTurn() && enemy.getTurn()) {
+            space.innerHTML = enemy.getMark();
+            player.setTurn(true);
+            enemy.setTurn(false);
+            let enemyVictory = victory(enemy, space);
+            console.log(enemy.playerMoves);
+            if (enemyVictory) {
+              gameContainer.style.display = "none"
+              resultsContainer.style.display = "flex"
+              victoryResult(enemy, player)
+            } else if (
+              !enemyVictory &&
+              !enemyVictory &&
+              boardIterations === 9
+            ) {
+              console.log("ES EMPATE");
+            }
+          }
         }
       };
     });
   }
 
   function printBoard(player, enemy) {
-    printConditions(player, enemy);
+    gameFlow(player, enemy);
   }
 
   return { printBoard };
@@ -93,10 +170,11 @@ const game = (function () {
 const PlayerFactory = (name, mark, turn) => {
   const playerMark = mark;
   let playerTurn = turn;
+  const playerMoves = [];
   const getMark = () => playerMark;
   const getTurn = () => playerTurn;
   const setTurn = (newTurn) => (playerTurn = newTurn);
-  return { name, getMark, getTurn, setTurn };
+  return { name, getMark, getTurn, setTurn, playerMoves };
 };
 
 playButton.onclick = function () {
