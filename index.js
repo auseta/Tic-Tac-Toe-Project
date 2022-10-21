@@ -1,74 +1,77 @@
-const mainContainer = document.querySelector(".main");
-const gameContainer = document.querySelector(".game");
-const resultsContainer = document.querySelector(".results")
-const playButton = document.querySelector("#play-button");
-const inputX = document.querySelector("#player-x-name");
-const inputO = document.querySelector("#player-o-name");
-const resultsMessage = document.querySelector("#results-message");
+const game = (function () {
 
-const gameboard = (function () {
-  const gameboard = {
-    board: [
-      [1, 2, 3],
-      [4, 5, 6],
-      [7, 8, 9],
-    ],
-  };
+  const mainContainer = document.querySelector(".main");
+  const gameContainer = document.querySelector(".game");
+  const resultsContainer = document.querySelector(".results")
+  const playButton = document.querySelector("#play-button");
+  const inputX = document.querySelector("#player-x-name");
+  const inputO = document.querySelector("#player-o-name");
+  const resultsMessage = document.querySelector("#results-message");
+  const replayButton = document.querySelector("#replay-button");
+  const menuButton = document.querySelector("#menu-button")
 
-  function addSpaceClass(element) {
-    switch (element.getAttribute("id")) {
-      case "1":
-        element.classList.add("left-space", "board-element");
-        break;
-      case "2":
-        element.classList.add("middle-space", "board-element");
-        break;
-      case "3":
-        element.classList.add("right-space", "board-element");
-        break;
-      case "4":
-        element.classList.add("left-space", "board-element");
-        break;
-      case "5":
-        element.classList.add("middle-space", "board-element");
-        break;
-      case "6":
-        element.classList.add("right-space", "board-element");
-        break;
-      case "7":
-        element.classList.add("left-space", "board-element");
-        break;
-      case "8":
-        element.classList.add("middle-space", "board-element");
-        break;
-      case "9":
-        element.classList.add("right-space", "board-element");
-        break;
-    }
-  }
+  let boardIterations = 0;
 
-  function createElement() {
-    for (const column of gameboard.board) {
-      for (let space of column) {
-        const boardElement = document.createElement("div");
-        boardElement.id = space;
-        addSpaceClass(boardElement);
-        mainContainer.style.display = "none";
-        gameContainer.style.display = "grid";
-        gameContainer.appendChild(boardElement);
+  const gameboard = (function () {
+    const gameboard = {
+      board: [
+        [1, 2, 3],
+        [4, 5, 6],
+        [7, 8, 9],
+      ],
+    };
+  
+    function addSpaceClass(element) {
+      switch (element.getAttribute("id")) {
+        case "1":
+          element.classList.add("left-space", "board-element");
+          break;
+        case "2":
+          element.classList.add("middle-space", "board-element");
+          break;
+        case "3":
+          element.classList.add("right-space", "board-element");
+          break;
+        case "4":
+          element.classList.add("left-space", "board-element");
+          break;
+        case "5":
+          element.classList.add("middle-space", "board-element");
+          break;
+        case "6":
+          element.classList.add("right-space", "board-element");
+          break;
+        case "7":
+          element.classList.add("left-space", "board-element");
+          break;
+        case "8":
+          element.classList.add("middle-space", "board-element");
+          break;
+        case "9":
+          element.classList.add("right-space", "board-element");
+          break;
       }
     }
-  }
-
-  function render() {
-    createElement();
-  }
-
-  return { render };
-})();
-
-const game = (function () {
-  let boardIterations = 0;
+  
+    function createElement() {
+      for (const column of gameboard.board) {
+        for (let space of column) {
+          const boardElement = document.createElement("div");
+          boardElement.id = space;
+          addSpaceClass(boardElement);
+          mainContainer.style.display = "none";
+          gameContainer.style.display = "grid";
+          gameContainer.appendChild(boardElement);
+        }
+      }
+    }
+  
+    function render() {
+      createElement();
+    }
+  
+    return { render };
+  })();
 
   const winConditions = {
     winCombos: [
@@ -92,7 +95,7 @@ const game = (function () {
     let victoryMessage = Math.round(Math.random() * 2 + 1);
     switch (victoryMessage) {
       case 1:
-        resultsMessage.textContent = `This was a massacre, ${player.name} bluntly crushed Enemy.`;
+        resultsMessage.textContent = `This was a massacre, ${player.name} bluntly crushed ${enemy.name}.`;
         break;
       case 2:
         resultsMessage.textContent = `but what a battle, it seemed like a hopeless case but ${player.name} knew how to act calmly and achieved victory over ${enemy.name}`;
@@ -114,10 +117,35 @@ const game = (function () {
     }
   }
 
-  function gameFlow(player, enemy) {
+  function resetBoard(player, enemy) {
     let boardSpace = document.querySelectorAll(".board-element");
-    boardSpace.forEach((space) => {
-      space.onclick = function (e) {
+    boardSpace.forEach( space => space.innerHTML = "" )
+    boardIterations = 0
+    player.playerMoves = [];
+    enemy.playerMoves = [];
+    player.setTurn(true);
+    enemy.setTurn(false)
+  }
+
+  function replay(player, enemy) {
+    resetBoard(player, enemy)
+    resultsContainer.style.display = "none";
+    gameContainer.style.display = "grid";
+  }
+
+  function menu(player, enemy) {
+    resetBoard(player, enemy)
+    resultsContainer.style.display = "none";
+    mainContainer.style.display = "flex";
+    gameContainer.innerHTML = ""
+    inputX.value = "";
+    inputO.value = "";
+  }
+
+  function gameFlow(player, enemy) {
+    const boardSpace = document.querySelectorAll(".board-element");
+    boardSpace.forEach(space => {
+      space.onclick = function () {
         if (space.innerHTML === "") {
           boardIterations++;
 
@@ -135,7 +163,9 @@ const game = (function () {
               !playerVictory &&
               boardIterations === 9
             ) {
-              console.log("ES EMPATE");
+              gameContainer.style.display = "none"
+              resultsContainer.style.display = "flex"
+              resultsMessage.textContent = "IT'S A TIE!"
             }
           } else if (!player.getTurn() && enemy.getTurn()) {
             space.innerHTML = enemy.getMark();
@@ -147,12 +177,6 @@ const game = (function () {
               gameContainer.style.display = "none"
               resultsContainer.style.display = "flex"
               victoryResult(enemy, player)
-            } else if (
-              !enemyVictory &&
-              !enemyVictory &&
-              boardIterations === 9
-            ) {
-              console.log("ES EMPATE");
             }
           }
         }
@@ -162,26 +186,30 @@ const game = (function () {
 
   function printBoard(player, enemy) {
     gameFlow(player, enemy);
+    replayButton.addEventListener("click", () => {
+      replay(player, enemy)
+    })
+    menuButton.addEventListener("click", () => {
+      menu(player, enemy)
+    })
   }
 
-  return { printBoard };
+  const PlayerFactory = (name, mark, turn) => {
+    const playerMark = mark;
+    let playerTurn = turn;
+    let playerMoves = [];
+    const getMark = () => playerMark;
+    const getTurn = () => playerTurn;
+    const setTurn = (newTurn) => (playerTurn = newTurn);
+    return { name, getMark, getTurn, setTurn, playerMoves };
+  };
+  
+  playButton.onclick = function () {
+    if (inputX.value && inputO.value) {
+      let playerX = PlayerFactory(inputX.value, "X", true);
+      let playerO = PlayerFactory(inputO.value, "O", false);
+      gameboard.render();
+      printBoard(playerX, playerO);
+    }
+  };
 })();
-
-const PlayerFactory = (name, mark, turn) => {
-  const playerMark = mark;
-  let playerTurn = turn;
-  const playerMoves = [];
-  const getMark = () => playerMark;
-  const getTurn = () => playerTurn;
-  const setTurn = (newTurn) => (playerTurn = newTurn);
-  return { name, getMark, getTurn, setTurn, playerMoves };
-};
-
-playButton.onclick = function () {
-  if (inputX.value && inputO.value) {
-    let playerX = PlayerFactory(inputX.value, "X", true);
-    let playerO = PlayerFactory(inputO.value, "O", false);
-    gameboard.render();
-    game.printBoard(playerX, playerO);
-  }
-};
