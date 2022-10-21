@@ -1,8 +1,6 @@
 # Tic-Tac-Toe-Project
 The classic Tic-Tac-Toe game that you can play in your browser! Designed so you can play it with a person by your side 🚀
 
-**PROYECT IN PROGRESS**
-
 ![tic-tac-toe-project](https://user-images.githubusercontent.com/89555954/196322791-56c7a506-bdcc-412e-9526-4b214664521d.jpg)
 
 
